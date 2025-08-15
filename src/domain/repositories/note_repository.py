@@ -27,5 +27,9 @@ class INoteRepository(ABC):
         pass
 
     @abstractmethod
+    def search_by_string(self, text: str, db) -> Union[Note, None]:
+        pass
+
+    @abstractmethod
     def create_note_table(self, db: IConnectionDatabase) -> None:
         pass

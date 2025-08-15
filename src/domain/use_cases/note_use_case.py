@@ -45,6 +45,14 @@ class NoteUseCase:
             message="No se logro eliminar la información, el registro no existe"
         )
 
+    def execute_search_by_text(self, text: str, db) -> Union[Note, None]:
+        data = self.note_repository.search_by_string(text, db)
+        if data:
+            return Response.success(response=data)
+        return Response.success(
+            message="No se encontro ninguna nota"
+        )
+
     def execute_create_table(self, db) -> None:
         self.note_repository.create_note_table(db)
         return Response.success(response="creada la tabla")

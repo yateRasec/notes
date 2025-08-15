@@ -15,6 +15,16 @@ class NoteRepository(INoteRepository):
             return Note.map_from_db(notes[0])
         return None
 
+    def search_by_string(
+        self, text: str, db: IConnectionDatabase
+    ) -> Union[List[Note], None]:
+        if not text:
+            return self.get_all_notes(db)
+        cursor = db.run_query(
+            f"SELECT * FROM notes WHERE title LIKE '%{text}%' OR description LIKE '%{text}%'"
+        )
+        return Note.map_list_from_db([dict(row) for row in cursor.fetchall()])
+
     def get_all_notes(self, db: IConnectionDatabase) -> Union[List[Note], None]:
         cursor = db.run_query("SELECT * FROM notes")
         return Note.map_list_from_db([dict(row) for row in cursor.fetchall()])
